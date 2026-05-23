@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORA — Gestión de Proyectos para Diseñadores y Arquitectos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAFA;
+    --bg-alt: #F0F0F0;
+    --bg-light: #FFFFFF;
+    --accent: #FF6B1C;
+    --accent-glow: rgba(255,107,28,0.25);
+    --accent-soft: rgba(255,107,28,0.12);
+    --text: #111111;
+    --text-muted: #666666;
+    --text-dark: #111111;
+    --radius: 12px;
+    --font: 'Inter', sans-serif;
+    --font-body: 'Nunito', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: #FAFAFA;
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(250,250,250,0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 0 5%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-cta {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+
+  /* ─── SHARED ─── */
+  section { padding: 96px 5%; }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    background: #FAFAFA;
+    padding: 0 5%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 60%; height: 100%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,107,28,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-top {
+    padding: 72px 0 32px;
+    text-align: left;
+  }
+  .hero-eyebrow {
+    color: var(--accent);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .hero-headline {
+    font-size: clamp(26px, 3vw, 42px);
+    font-weight: 800;
+    color: #111111;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .hero-headline span { color: var(--accent); }
+  .hero-sub {
+    font-size: 12.5px;
+    color: #666666;
+    margin-bottom: 18px;
+    line-height: 1.65;
+    max-width: 640px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 0 40px;
+  }
+  .hero-right { text-align: left; }
+
+  .benefits-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #111;
+    font-weight: 600;
+  }
+  .benefits-row .check {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 5px;
+  }
+  .hero-form-label {
+    font-size: 9px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ─── VIDEO ─── */
+  .video-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    border: 1.5px solid rgba(255,107,28,0.3);
+  }
+  .video-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .video-footer { font-size: 11px; color: #555555; text-align: center; margin-top: 8px; }
+
+  /* ─── FORM ─── */
+  .form-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-wrap input,
+  .form-wrap select {
+    width: 100%;
+    padding: 13px 15px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(0,0,0,0.15);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none; -webkit-appearance: none;
+  }
+  .form-wrap input::placeholder { color: #555555; }
+  .form-wrap input:focus, .form-wrap select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .form-wrap select { color: #666666; cursor: pointer; }
+  .form-wrap select option { background: #FFFFFF; color: var(--text); }
+
+  /* ── CTA FINAL ── */
+  #cta-final {
+    background: #111;
+    text-align: center;
+    padding: 80px 5%;
+  }
+  .cta-final-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .cta-final-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .cta-final-sub {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    color: #aaa;
+    margin-bottom: 32px;
+  }
+  .cta-mid {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.2px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .cta-mid:hover {
+    background: #e05500;
+    transform: translateY(-1px);
+  }
+  .form-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(255,107,28,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .form-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(255,107,28,0.42);
+  }
+  .form-note { font-size: 11px; color: var(--text-muted); text-align: center; }
+  .form-disclaimer { font-size: 10px; color: #444444; text-align: center; line-height: 1.55; }
+
+  /* ─── PROBLEMA ─── */
+  #problema { background: var(--bg-light); color: #111111; text-align: center; }
+  #problema .eyebrow { color: var(--accent); }
+  #problema .section-title {
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 800;
+    color: #111111;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    max-width: 720px;
+    margin: 0 auto 20px;
+  }
+  #problema .section-para {
+    font-size: 17px;
+    color: #444444;
+    max-width: 660px;
+    margin: 0 auto 48px;
+    line-height: 1.75;
+  }
+  .closing-quote {
+    font-style: italic;
+    font-size: 19px;
+    color: var(--accent);
+    font-weight: 600;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ─── SOLUCIÓN ─── */
+  #solucion { background: #FAFAFA; text-align: center; }
+  #solucion .section-title {
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 800;
+    color: #111111;
+    letter-spacing: -1px;
+    margin-bottom: 52px;
+    line-height: 1.15;
+  }
+  .feature-cards-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 900px;
+    margin: 0 auto 40px;
+  }
+  .feature-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .feature-tagline {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .feature-card {
+    background: #FFFFFF;
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: left;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.1); }
+  .feature-icon { font-size: 26px; margin-bottom: 12px; }
+  .feature-title { font-size: 17px; font-weight: 700; color: #111111; margin-bottom: 8px; }
+  .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .emotional-quote {
+    font-style: italic; font-size: 16px;
+    color: #666666;
+    max-width: 520px; margin: 0 auto; line-height: 1.7;
+  }
+
+  /* ─── PARA QUIÉN ─── */
+  #para-quien { background: var(--bg-light); color: #111111; text-align: center; }
+  #para-quien .eyebrow { color: var(--accent); }
+  #para-quien .section-title {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800; color: #111111;
+    letter-spacing: -1px; margin-bottom: 48px; line-height: 1.2;
+  }
+  .profile-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+  .profile-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    flex: 1 1 220px; max-width: 270px;
+    text-align: left;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    border-top: 3px solid var(--accent);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .profile-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+  .profile-icon { font-size: 30px; margin-bottom: 12px; }
+  .profile-title { font-size: 16px; font-weight: 700; color: #111111; margin-bottom: 8px; }
+  .profile-desc { font-size: 13px; color: #666666; line-height: 1.6; }
+
+  /* ─── SOCIAL PROOF ─── */
+  #social-proof { background: #FFFFFF; text-align: center; }
+  #social-proof .section-title {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 800; color: var(--text);
+    letter-spacing: -0.5px; margin-bottom: 48px; line-height: 1.2;
+  }
+  .quotes-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+  .quote-card {
+    background: #FAFAFA;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    flex: 1 1 240px; max-width: 290px;
+    text-align: left;
+    transition: transform 0.2s;
+  }
+  .quote-card:hover { transform: translateY(-4px); }
+  .quote-mark {
+    font-size: 56px; color: var(--accent);
+    line-height: 0.7; font-family: Georgia, serif;
+    font-weight: 900; margin-bottom: 14px; display: block;
+  }
+  .quote-text { font-size: 14px; color: #333333; line-height: 1.7; font-style: italic; margin-bottom: 14px; }
+  .quote-author { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .proof-note { font-size: 12px; color: #555555; margin-top: 8px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #FAFAFA;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    padding: 60px 5% 36px;
+    text-align: center;
+  }
+  .footer-tagline { font-size: 14px; color: #666666; margin-bottom: 4px; }
+  .footer-location { font-size: 12px; color: #444444; margin-bottom: 24px; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .footer-links a { color: #666666; text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { font-size: 11px; color: #888888; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease-out both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.22s; }
+  .delay-3 { animation-delay: 0.34s; }
+  .delay-4 { animation-delay: 0.46s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 860px) {
+    #hero { min-height: auto; padding-top: 0; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; padding: 96px 0 48px; }
+    .hero-right { text-align: center; }
+    .form-wrap { margin: 0 auto; }
+    .feature-cards-4 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    section { padding: 72px 6%; }
+    .profile-card, .quote-card { max-width: 100%; flex: 1 1 100%; }
+    .footer-links { gap: 16px; }
+  }
+  @media (max-width: 480px) {
+    .nav-cta { font-size: 12px; padding: 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="12" fill="#FF6B1C"/>
+      <circle cx="16" cy="16" r="6" fill="#fff" opacity="0.9"/>
+      <text x="34" y="22" font-family="Inter,sans-serif" font-weight="800" font-size="18" fill="#111" letter-spacing="-0.5">ora</text>
+    </svg>
+  </a>
+  <a href="#hero" class="nav-cta">Unirme →</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-wrapper">
+    <div class="hero-top fade-up">
+      <span class="hero-eyebrow">DISEÑO · ARQUITECTURA · GESTIÓN DE PROYECTOS</span>
+      <h1 class="hero-headline">Más tiempo para <span>lo que importa.</span></h1>
+      <p class="hero-sub">ORA es el asistente de gestión pensado para quienes diseñan y coordinan proyectos de espacios. Para que puedas dedicarle más tiempo a tus clientes, a diseñar y a explorar ideas.</p>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-left fade-up delay-2">
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/9gOxnElr4pw?rel=0&modestbranding=1"
+            title="¿Qué puedo hacer en ORA?"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <p class="video-footer">ORA · Gestión de proyectos para diseñadores y arquitectos</p>
+      </div>
+
+      <div class="hero-right fade-up delay-3">
+        <span class="hero-form-label">CO-CREADORES · PRIMERA GENERACIÓN</span>
+        <div class="benefits-row">
+          <span><span class="check">✓</span> 12 meses de acceso gratis</span>
+          <span><span class="check">✓</span> Primero/a en probar cada función</span>
+        </div>
+        <div class="form-wrap" style="margin:0;">
+          <input type="text" id="input-nombre" placeholder="Nombre completo" required>
+          <input type="email" id="input-email" placeholder="Correo electrónico" required>
+          <select id="input-profesion">
+            <option value="" disabled selected>Tu profesión</option>
+            <option value="disenador">Diseñador/a de interiores</option>
+            <option value="arquitecto">Arquitecto/a</option>
+            <option value="ingeniero">Ingeniero civil / Contratista</option>
+            <option value="otro">Otro</option>
+          </select>
+          <button class="form-btn" id="form-btn-submit">Quiero ser Co-creador/a →</button>
+          <p class="form-note">Solo 50 lugares · Sin spam · Sin tarjeta de crédito</p>
+          <p class="form-disclaimer">ORA está en desarrollo. Registro sin compromiso económico.<br>Pasados los 50, entras a lista de espera.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EL PROBLEMA ═══ -->
+<section id="problema">
+  <span class="eyebrow">EL PROBLEMA</span>
+  <h2 class="section-title">¿Cuántas apps tienes abiertas ahora mismo para gestionar un solo proyecto?</h2>
+  <p class="section-para">WhatsApp para coordinar. Excel para el cronograma. Drive para guardar los planos. Calendar para las fechas. Un papel para lo que ya olvidaste guardar.<br><br>Y en medio de todo eso, ¿cuándo fue la última vez que pudiste concentrarte de verdad en diseñar?</p>
+  <p class="closing-quote">"El problema no es que seas desorganizado/a. Es que ninguna herramienta fue diseñada para ti."</p>
+</section>
+
+<!-- ═══ LA VISIÓN ═══ -->
+<section id="solucion">
+  <span class="eyebrow">LO QUE ORA HACE POR TI</span>
+  <h2 class="section-title">Menos gestión. Más presencia.</h2>
+  <div class="feature-cards-4">
+    <div class="feature-card">
+      <div class="feature-icon">🎙️</div>
+      <p class="feature-tag">CAPTURA ACTIVA EN CAMPO</p>
+      <p class="feature-tagline">"Manos libres, mente enfocada."</p>
+      <p class="feature-desc">Registra audios de avances, decisiones o imprevistos mientras recorres la obra. ORA transcribe y clasifica la información automáticamente en la partida correspondiente, eliminando las notas perdidas en cuadernos o chats de WhatsApp.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <p class="feature-tag">CRONOGRAMA AUTOGESTIONADO</p>
+      <p class="feature-tagline">"Reacciona al cambio en segundos."</p>
+      <p class="feature-desc">¿El mármol se retrasó o el clima impidió el vaciado? Solo díselo a ORA. El sistema reajusta instantáneamente la ruta crítica y recalcula el impacto en las fechas de entrega sin que tengas que tocar un solo Excel.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <p class="feature-tag">INTELIGENCIA PREVENTIVA</p>
+      <p class="feature-tagline">"Un experto técnico a tu lado."</p>
+      <p class="feature-desc">Recibe consejos de supervisión técnica justo antes de empezar una partida crítica y alertas sobre el historial de tus proveedores. ORA usa la experiencia de tus proyectos pasados para evitar que cometas el mismo error dos veces.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <p class="feature-tag">ALERTAS PROACTIVAS</p>
+      <p class="feature-tagline">"Paz mental para el profesional."</p>
+      <p class="feature-desc">No necesitas entrar a la app para saber si algo va mal. ORA te contacta directamente cuando detecta un riesgo inminente en costos o una fecha de entrega en peligro. Tú descansas mientras el sistema vigila tu obra 24/7.</p>
+    </div>
+  </div>
+  <p class="emotional-quote">"Imagina llegar a cada reunión sabiendo exactamente cómo va todo. Con tiempo para escuchar, para proponer, para diseñar."</p>
+</section>
+
+<!-- ═══ PARA QUIÉN ES ═══ -->
+<section id="para-quien">
+  <span class="eyebrow">TU PERFIL</span>
+  <h2 class="section-title">ORA es para ti si gestionas proyectos de espacios.</h2>
+  <div class="profile-cards">
+    <div class="profile-card">
+      <div class="profile-icon">🖌️</div>
+      <h3 class="profile-title">Diseñador/a de interiores</h3>
+      <p class="profile-desc">Desde la conceptualización hasta la entrega. Coordina materiales, proveedores y clientes sin perder el hilo creativo.</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">🏛️</div>
+      <h3 class="profile-title">Arquitecto/a</h3>
+      <p class="profile-desc">Gestiona la etapa de diseño y la de ejecución en múltiples proyectos, con visibilidad clara en todo momento.</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">🏗️</div>
+      <h3 class="profile-title">Ingeniero civil / Contratista</h3>
+      <p class="profile-desc">Registra avances, coordina con el equipo y mantiene al cliente informado sin invertir horas en reportes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOCIAL PROOF ═══ -->
+<section id="social-proof">
+  <span class="eyebrow">LO QUE DICEN LOS PROFESIONALES</span>
+  <h2 class="section-title">El problema que ORA viene a resolver,<br>en sus propias palabras.</h2>
+  <div class="quotes-row">
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <p class="quote-text">Necesito poder mover una fecha y que todo el cronograma se acomode solo automáticamente.</p>
+      <p class="quote-author">Diseñadora, Lima</p>
+    </div>
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <p class="quote-text">El problema es saltar entre 4 apps para responderle al cliente cómo va el proyecto.</p>
+      <p class="quote-author">Arquitecto, Lima</p>
+    </div>
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <p class="quote-text">Quiero una herramienta que actúe como asistente, que me recuerde lo que viene.</p>
+      <p class="quote-author">Diseñadora, Lima</p>
+    </div>
+  </div>
+  <p class="proof-note">Voces reales de profesionales en Lima durante el proceso de investigación de ORA.</p>
+</section>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section id="cta-final">
+  <p class="cta-final-label">CO-CREADORES · PRIMERA GENERACIÓN</p>
+  <h2 class="cta-final-headline">Sé parte de la primera generación de ORA.</h2>
+  <p class="cta-final-sub">50 lugares. Sin costo. Sin compromiso.</p>
+  <a href="#hero" class="cta-mid">Quiero ser Co-creador/a →</a>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 12px;display:block;">
+    <circle cx="16" cy="16" r="12" fill="#FF6B1C"/>
+    <circle cx="16" cy="16" r="6" fill="#fff" opacity="0.9"/>
+    <text x="34" y="22" font-family="Inter,sans-serif" font-weight="800" font-size="18" fill="#111" letter-spacing="-0.5">ora</text>
+  </svg>
+  <p class="footer-tagline">El asistente de proyectos para quienes diseñan espacios.</p>
+  <p class="footer-location">Lima, Perú · 2026</p>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+    <a href="mailto:hola@oraapp.studio">hola@oraapp.studio</a>
+  </div>
+  <p class="footer-copy">© 2026 ORA · Todos los derechos reservados</p>
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Fade-up en tarjetas al hacer scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .profile-card, .quote-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  // Envío del formulario → Google Sheets
+  document.getElementById('form-btn-submit').addEventListener('click', function() {
+    const nombre = document.getElementById('input-nombre');
+    const email = document.getElementById('input-email');
+    const profesion = document.getElementById('input-profesion');
+
+    document.querySelectorAll('.form-error').forEach(e => e.remove());
+    [nombre, email, profesion].forEach(input => { input.style.borderColor = 'rgba(0,0,0,0.15)'; });
+
+    let valid = true;
+    [nombre, email, profesion].forEach(input => {
+      if (!input.value) {
+        input.style.borderColor = 'rgba(255,107,28,0.9)';
+        const msg = document.createElement('p');
+        msg.className = 'form-error';
+        msg.style.cssText = 'color:#FF6B1C;font-size:11px;margin:-4px 0 4px;font-weight:700;';
+        msg.textContent = '⚠ Este campo es obligatorio';
+        input.after(msg);
+        valid = false;
+      }
+    });
+
+    if (valid) {
+      const btn = this;
+      btn.textContent = 'Enviando...';
+      btn.style.background = '#aaa';
+      btn.disabled = true;
+
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypSSGP6UgzZ6g-5C-CXqNxeQGy7-NgTU0MUM5jGn6ZjdP41OuGEMdfd73hDnbG2oaz/exec';
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          nombre: nombre.value,
+          email: email.value,
+          profesion: profesion.value,
+          fecha: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' })
+        })
+      })
+      .then(() => {
+        btn.textContent = '✓ ¡Anotado! Te contactamos pronto.';
+        btn.style.background = '#2ecc71';
+        btn.style.boxShadow = '0 10px 32px rgba(46,204,113,0.35)';
+      })
+      .catch(() => {
+        btn.textContent = '✓ ¡Anotado! Te contactamos pronto.';
+        btn.style.background = '#2ecc71';
+        btn.style.boxShadow = '0 10px 32px rgba(46,204,113,0.35)';
+      });
+    }
+  });
+</script>
+</body>
+</html>
